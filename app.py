@@ -10,6 +10,9 @@ from linebot.exceptions import (
 )
 from linebot.models import *
 
+from respond import *
+
+
 app = Flask(__name__)
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 # Channel Access Token
@@ -40,13 +43,19 @@ def callback():
 # 訊息傳遞區塊
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    message = TextSendMessage(text=event.message.text)
-    line_bot_api.reply_message(event.reply_token, message)
+
+    user_input = event.message.text
+
+    if "推薦" in user_input:
+        message = send_recommend_activity()
+        line_bot_api.reply_message(event.reply_token, message)
+    else:
+        message = send_sticker()
+        line_bot_api.reply_message(event.reply_token, message)
 
 
 @handler.add(FollowEvent)
 def handle_follow(event):
-    print(event)
     user_id = event.source.user_id
     profile = line_bot_api.get_profile(user_id)
     name = profile.display_name
@@ -66,7 +75,7 @@ def handle_member_joined(event):
     gid = event.source.group_id
     profile = line_bot_api.get_group_member_profile(gid, uid)
     name = profile.display_name
-    message = TextSendMessage(text=f'哼哼～ {name} 就讓我來為你介紹喜劇大小事吧！')
+    message = TextSendMessage(text=f'呵呵～ 歡迎 {name} 的加入，可以問我關於喜劇的事呦！')
     line_bot_api.reply_message(event.reply_token, message)
 
 
