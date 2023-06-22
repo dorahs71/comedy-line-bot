@@ -44,13 +44,29 @@ def handle_message(event):
     line_bot_api.reply_message(event.reply_token, message)
 
 
+@handler.add(FollowEvent)
+def handle_follow(event):
+    print(event)
+    user_id = event.source.user_id
+    profile = line_bot_api.get_profile(user_id)
+    name = profile.display_name
+    message = TextSendMessage(text=f'哼哼～ {name} 就讓我來為你介紹喜劇大小事吧！')
+    line_bot_api.reply_message(event.reply_token, message)
+
+
+@handler.add(JoinEvent)
+def handle_join(event):
+    message = TextSendMessage(text='哈哈，歡迎我的加入，就讓我來為你介紹喜劇大小事吧！')
+    line_bot_api.reply_message(event.reply_token, message)
+
+
 @handler.add(MemberJoinedEvent)
-def welcome(event):
+def handle_member_joined(event):
     uid = event.joined.members[0].user_id
     gid = event.source.group_id
     profile = line_bot_api.get_group_member_profile(gid, uid)
     name = profile.display_name
-    message = TextSendMessage(text=f'{name} 就讓我來為你介紹喜劇大小事吧！')
+    message = TextSendMessage(text=f'哼哼～ {name} 就讓我來為你介紹喜劇大小事吧！')
     line_bot_api.reply_message(event.reply_token, message)
 
 
