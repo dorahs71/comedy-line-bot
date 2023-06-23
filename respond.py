@@ -2,6 +2,8 @@ from linebot.models import *
 
 from data import *
 
+from message_json import *
+
 import random
 
 
@@ -17,100 +19,15 @@ def send_sticker():
 
 def send_recommend_activity():
     activity = random_recommend_activity()
-    recommend_message = FlexSendMessage(
-        alt_text='recommend_activity',
-        contents={
-            "type": "bubble",
-            "hero": {
-                "type": "image",
-                "url":  activity[3],
-                "size": "full",
-                "aspectRatio": "20:13",
-                "aspectMode": "cover",
-            },
-            "body": {
-                "type": "box",
-                "layout": "vertical",
-                "contents": [
-                    {
-                        "type": "text",
-                        "text": activity[0],
-                        "weight": "bold",
-                        "size": "xl"
-                    },
-                    {
-                        "type": "box",
-                        "layout": "vertical",
-                        "margin": "lg",
-                        "spacing": "sm",
-                        "contents": [
-                            {
-                                "type": "box",
-                                "layout": "baseline",
-                                "spacing": "sm",
-                                "contents": [
-                                    {
-                                        "type": "text",
-                                        "text": "Place",
-                                        "color": "#aaaaaa",
-                                        "size": "sm",
-                                        "flex": 1
-                                    },
-                                    {
-                                        "type": "text",
-                                        "text": activity[1],
-                                        "wrap": True,
-                                        "color": "#666666",
-                                        "size": "sm",
-                                        "flex": 5
-                                    }
-                                ]
-                            },
-                            {
-                                "type": "box",
-                                "layout": "baseline",
-                                "spacing": "sm",
-                                "contents": [
-                                    {
-                                        "type": "text",
-                                        "text": "Time",
-                                        "color": "#aaaaaa",
-                                        "size": "sm",
-                                        "flex": 1
-                                    },
-                                    {
-                                        "type": "text",
-                                        "text": activity[2],
-                                        "wrap": True,
-                                        "color": "#666666",
-                                        "size": "sm",
-                                        "flex": 5
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            },
-            "footer": {
-                "type": "box",
-                "layout": "vertical",
-                "spacing": "sm",
-                "contents": [
-                    {
-                        "type": "button",
-                        "style": "link",
-                        "height": "sm",
-                        "action": {
-                            "type": "uri",
-                            "label": "點擊查看",
-                            "uri": activity[-1]
-                        }
-                    }
-                ],
-                "flex": 0
-            }
-        }
-    )
+    json_file = recommend_activity_json(
+        activity[-2], activity[0], activity[1], activity[2], activity[-1])
+
+    try:
+        recommend_message = FlexSendMessage(
+            alt_text='recommend_activity',
+            contents=json_file
+        )
+    except:
+        recommend_message = TextSendMessage(text='唉呀...出了點問題耶～你叫我爸來吧')
 
     return recommend_message
