@@ -64,8 +64,9 @@ def handle_message(event):
             message = send_recommend_activity(activity)
             line_bot_api.reply_message(event.reply_token, message)
         case _:
-            message = send_sticker()
-            line_bot_api.reply_message(event.reply_token, message)
+            return
+            # message = send_sticker()
+            # line_bot_api.reply_message(event.reply_token, message)
 
 
 @handler.add(FollowEvent)
