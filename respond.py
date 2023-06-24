@@ -17,9 +17,8 @@ def send_sticker():
     return sticker_message
 
 
-def send_recommend_activity():
-    activity = random_recommend_activity()
-    json_file = recommend_activity_json(
+def send_recommend_activity(activity):
+    json_file = generate_activity_json(
         activity[-2], activity[0], activity[1], activity[2], activity[-1])
 
     try:
@@ -28,6 +27,6 @@ def send_recommend_activity():
             contents=json_file
         )
     except:
-        recommend_message = TextSendMessage(text='唉呀...出了點問題耶～你叫我爸來吧')
+        recommend_message = TextSendMessage(text='唉呀...出了點問題耶～')
 
     return recommend_message
