@@ -23,7 +23,7 @@ def send_recommend_activity(activity):
 
     try:
         recommend_message = FlexSendMessage(
-            alt_text='recommend_activity',
+            alt_text='阿鏘推薦喜劇',
             contents=json_file
         )
     except:
@@ -35,21 +35,23 @@ def send_recommend_activity(activity):
 def send_city_activity(city_activity_list):
     if len(city_activity_list) == 1:
         activity = city_activity_list[0]
-        send_recommend_activity(activity)
-    else:
-        if len(city_activity_list) > 6:
-            city_activity_list = city_activity_list[:6]
-
-        json_file = [generate_activity_json(
-            activity[-2], activity[0], activity[1], activity[2], activity[-1]) for activity in city_activity_list]
-        flex_contents = {"type": "carousel", "contents": json_file}
-
-        try:
-            city_message = FlexSendMessage(
-                alt_text='search_city_activities',
-                contents=flex_contents
-            )
-        except:
-            city_message = TextSendMessage(text='唉呀...出了點問題耶～')
+        city_message = send_recommend_activity(activity)
 
         return city_message
+
+    elif len(city_activity_list) > 8:
+        city_activity_list = city_activity_list[:8]
+
+    json_file = [generate_activity_json(
+        activity[-2], activity[0], activity[1], activity[2], activity[-1]) for activity in city_activity_list]
+    flex_contents = {"type": "carousel", "contents": json_file}
+
+    try:
+        city_message = FlexSendMessage(
+            alt_text='阿鏘帶你看喜劇',
+            contents=flex_contents
+        )
+    except:
+        city_message = TextSendMessage(text='唉呀...出了點問題耶～')
+
+    return city_message
