@@ -1,4 +1,4 @@
-def recommend_activity_json(pic_url, title, place, date, link):
+def generate_activity_json(pic_url, title, place, date, link):
     return {
         "type": "bubble",
         "hero": {
@@ -7,6 +7,7 @@ def recommend_activity_json(pic_url, title, place, date, link):
                 "size": "full",
                 "aspectRatio": "20:13",
                 "aspectMode": "fit",
+                "backgroundColor": "#444444"
         },
         "body": {
             "type": "box",
