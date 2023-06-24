@@ -12,6 +12,8 @@ from linebot.models import *
 
 from respond import *
 
+from data import generate_city_dict
+
 
 app = Flask(__name__)
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
@@ -19,6 +21,10 @@ static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
 # Channel Secret
 handler = WebhookHandler(os.getenv('CHANNEL_SECRET'))
+
+# Activity Dictionary
+city_dict = generate_city_dict()
+city_with_activity = city_dict.keys()
 
 
 # 監聽所有來自 /callback 的 Post Request
@@ -46,12 +52,20 @@ def handle_message(event):
 
     user_input = event.message.text
 
-    if "推薦" in user_input:
-        message = send_recommend_activity()
-        line_bot_api.reply_message(event.reply_token, message)
-    else:
-        message = send_sticker()
-        line_bot_api.reply_message(event.reply_token, message)
+    match user_input:
+        case input if input in city_with_activity:
+            message = send_city_activity(city_dict[input])
+            line_bot_api.reply_message(event.reply_token, message)
+        case input if '市' in input or '縣' in input:
+            message = TextSendMessage(text=f'唉呀，{input}最近沒有喜劇活動喔！')
+            line_bot_api.reply_message(event.reply_token, message)
+        case input if '推薦' in input:
+            activity = random_recommend_activity()
+            message = send_recommend_activity(activity)
+            line_bot_api.reply_message(event.reply_token, message)
+        case _:
+            message = send_sticker()
+            line_bot_api.reply_message(event.reply_token, message)
 
 
 @handler.add(FollowEvent)
