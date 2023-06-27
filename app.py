@@ -94,6 +94,14 @@ def handle_member_joined(event):
     line_bot_api.reply_message(event.reply_token, message)
 
 
+@handler.add(PostbackEvent)
+def handle_postback(event):
+    print(event.postback)
+    message = TextSendMessage(
+        text='請輸入您想查詢的城市，並篩選月份，例如：「台北市/七月」，您也可以查詢「線上活動」呦')
+    line_bot_api.reply_message(event.reply_token, message)
+
+
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
