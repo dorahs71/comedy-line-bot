@@ -111,26 +111,15 @@ def checkCityRecommendFormat(input):
 
 @handler.add(FollowEvent)
 def handle_follow(event):
-    user_id = event.source.user_id
-    profile = line_bot_api.get_profile(user_id)
-    name = profile.display_name
-    message = TextSendMessage(text=f'哼哼～ {name} 就讓我來為你介紹喜劇大小事吧！')
+    message = TextSendMessage(
+        text='喵喵喵～朕想去看喜劇，姑且讓你這卑微的人類告訴我，想去哪個城市看表演吧!(๑ↀᆺↀ๑)✧')
     line_bot_api.reply_message(event.reply_token, message)
 
 
 @handler.add(JoinEvent)
 def handle_join(event):
-    message = TextSendMessage(text='哈哈，歡迎我的加入，就讓我來為你介紹喜劇大小事吧！')
-    line_bot_api.reply_message(event.reply_token, message)
-
-
-@handler.add(MemberJoinedEvent)
-def handle_member_joined(event):
-    uid = event.joined.members[0].user_id
-    gid = event.source.group_id
-    profile = line_bot_api.get_group_member_profile(gid, uid)
-    name = profile.display_name
-    message = TextSendMessage(text=f'呵呵～ 歡迎 {name} 的加入，可以問我關於喜劇的事呦！')
+    message = TextSendMessage(
+        text='喵喵喵～朕想去看喜劇，姑且讓你們這些卑微的人類告訴我，想去哪個城市看表演吧!(๑ↀᆺↀ๑)✧')
     line_bot_api.reply_message(event.reply_token, message)
 
 
@@ -138,7 +127,7 @@ def handle_member_joined(event):
 def handle_postback(event):
     print(event.postback)
     message = TextSendMessage(
-        text='請輸入您想查詢的城市，例如「台北」，並可以篩選月份，例如：「台北/七月」，您也可以查詢「線上」呦')
+        text='告訴我吧，卑微的人類～你想查詢的城市，如:[台北]，我還可以篩選月份，如:[台北/七月] <(๑ↀVↀ๑)>')
     line_bot_api.reply_message(event.reply_token, message)
 
 
