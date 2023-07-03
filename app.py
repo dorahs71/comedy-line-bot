@@ -12,7 +12,7 @@ from linebot.models import *
 
 from respond import *
 
-from data import generate_city_dict
+from data import generate_city_dict, generate_city_month_dict, tw_city_list, month_convert_dict
 
 
 app = Flask(__name__)
@@ -25,6 +25,7 @@ handler = WebhookHandler(os.getenv('CHANNEL_SECRET'))
 # Activity Dictionary
 city_dict = generate_city_dict()
 city_with_activity = city_dict.keys()
+city_month_dict = generate_city_month_dict(city_dict)
 
 
 # 監聽所有來自 /callback 的 Post Request
@@ -50,16 +51,19 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
 
-    user_input = event.message.text
+    user_input = event.message.text.replace('臺', '台')
 
     match user_input:
+        case input if '/' in input and checkCityMonthFormat(input):
+            city, month = input.split('/')
+            message = send_city_activity(city_month_dict[city][month])
         case input if input in city_with_activity:
             message = send_city_activity(city_dict[input])
             line_bot_api.reply_message(event.reply_token, message)
-        case input if '市' in input or '縣' in input:
+        case input if input in tw_city_list:
             message = TextSendMessage(text=f'唉呀，{input}最近沒有喜劇活動喔！')
             line_bot_api.reply_message(event.reply_token, message)
-        case input if '推薦' in input:
+        case input if checkRecommendFormat(input):
             activity = random_recommend_activity()
             message = send_recommend_activity(activity)
             line_bot_api.reply_message(event.reply_token, message)
@@ -67,6 +71,21 @@ def handle_message(event):
             return
             # message = send_sticker()
             # line_bot_api.reply_message(event.reply_token, message)
+
+
+def checkCityMonthFormat(input):
+    city, month = input.split('/')
+    if city in tw_city_list and month in month_convert_dict.values():
+        return True
+    else:
+        return False
+
+
+def checkRecommendFormat(input):
+    if input == '推薦' or input == '隨機推薦' or input == '隨機':
+        return True
+    else:
+        return False
 
 
 @handler.add(FollowEvent)
@@ -98,7 +117,7 @@ def handle_member_joined(event):
 def handle_postback(event):
     print(event.postback)
     message = TextSendMessage(
-        text='請輸入您想查詢的城市，並篩選月份，例如：「台北市/七月」，您也可以查詢「線上活動」呦')
+        text='請輸入您想查詢的城市，例如「台北」，並可以篩選月份，例如：「台北/七月」，您也可以查詢「線上」呦')
     line_bot_api.reply_message(event.reply_token, message)
 
 
