@@ -58,7 +58,12 @@ def handle_message(event):
     match user_input:
         case input if '/' in input and checkCityMonthFormat(input):
             city, month = input.split('/')
-            message = send_city_activity(city_month_dict[city][month])
+            print('city', city)
+            print('month', month)
+            if city in city_month_dict and month in city_month_dict[city]:
+                message = send_city_activity(city_month_dict[city][month])
+            else:
+                message = TextSendMessage(text=f'唉呀，{input}最近沒有喜劇活動喔！')
         case input if input in city_with_activity:
             message = send_city_activity(city_dict[input])
         case input if input in tw_city_list:
