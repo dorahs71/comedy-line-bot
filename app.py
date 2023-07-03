@@ -22,7 +22,7 @@ line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
 # Channel Secret
 handler = WebhookHandler(os.getenv('CHANNEL_SECRET'))
 
-# # Activity Dictionary
+# Activity Dictionary
 city_dict = generate_city_dict()
 city_with_activity = city_dict.keys()
 city_month_dict = generate_city_month_dict(city_dict)
@@ -58,7 +58,7 @@ def handle_message(event):
     match user_input:
         case input if '/' in input and checkCityMonthFormat(input):
             city, month = input.split('/')
-            message = send_city_activity(city_dict[city][month])
+            message = send_city_activity(city_month_dict[city][month])
         case input if input in city_with_activity:
             message = send_city_activity(city_dict[input])
         case input if input in tw_city_list:
@@ -81,7 +81,6 @@ def handle_message(event):
 def checkCityMonthFormat(input):
     city, month = input.split('/')
     if city in tw_city_list and month in month_convert_dict.values():
-        print('format is correct')
         return True
     else:
         return False
