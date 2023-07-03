@@ -39,8 +39,8 @@ def send_city_activity(city_activity_list):
 
         return city_message
 
-    elif len(city_activity_list) > 20:
-        city_activity_list = city_activity_list[:20]
+    elif len(city_activity_list) > 12:
+        city_activity_list = city_activity_list[:12]
 
     json_file = [generate_activity_json(
         activity['img src'], activity['theme'], activity['location'], activity['duration'], activity['link']) for activity in city_activity_list]
