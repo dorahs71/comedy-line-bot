@@ -87,3 +87,8 @@ def generate_city_month_dict(city_dict):
 def random_recommend_activity():
     activity = random.choice(valid_activity_list)
     return activity
+
+
+def random_city_recommend_activity(activity_lst):
+    activity = random.choice(activity_lst)
+    return activity

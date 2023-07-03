@@ -12,7 +12,7 @@ from linebot.models import *
 
 from respond import *
 
-from data import generate_city_dict, generate_city_month_dict, tw_city_list, month_convert_dict
+from data import *
 
 
 app = Flask(__name__)
@@ -22,7 +22,7 @@ line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
 # Channel Secret
 handler = WebhookHandler(os.getenv('CHANNEL_SECRET'))
 
-# Activity Dictionary
+# # Activity Dictionary
 city_dict = generate_city_dict()
 city_with_activity = city_dict.keys()
 city_month_dict = generate_city_month_dict(city_dict)
@@ -51,38 +51,54 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
 
+    message = ''
+
     user_input = event.message.text.replace('臺', '台')
 
     match user_input:
         case input if '/' in input and checkCityMonthFormat(input):
             city, month = input.split('/')
-            message = send_city_activity(city_month_dict[city][month])
+            message = send_city_activity(city_dict[city][month])
         case input if input in city_with_activity:
             message = send_city_activity(city_dict[input])
-            line_bot_api.reply_message(event.reply_token, message)
         case input if input in tw_city_list:
             message = TextSendMessage(text=f'唉呀，{input}最近沒有喜劇活動喔！')
-            line_bot_api.reply_message(event.reply_token, message)
         case input if checkRecommendFormat(input):
             activity = random_recommend_activity()
             message = send_recommend_activity(activity)
-            line_bot_api.reply_message(event.reply_token, message)
+        case input if '/' in input and checkCityRecommendFormat(input):
+            city, recommend = input.split('/')
+            activity = random_city_recommend_activity(city_dict[city])
+            message = send_recommend_activity(activity)
         case _:
             return
             # message = send_sticker()
             # line_bot_api.reply_message(event.reply_token, message)
 
+    line_bot_api.reply_message(event.reply_token, message)
+
 
 def checkCityMonthFormat(input):
     city, month = input.split('/')
     if city in tw_city_list and month in month_convert_dict.values():
+        print('format is correct')
         return True
     else:
         return False
 
 
 def checkRecommendFormat(input):
-    if input == '推薦' or input == '隨機推薦' or input == '隨機':
+    keywords = ['推薦', '隨機推薦', '隨機']
+    if any(keyword in input for keyword in keywords):
+        return True
+    else:
+        return False
+
+
+def checkCityRecommendFormat(input):
+    city, recommend = input.split('/')
+    keywords = ['推薦', '隨機推薦', '隨機']
+    if city in tw_city_list and any(keyword in recommend for keyword in keywords):
         return True
     else:
         return False
