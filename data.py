@@ -12,7 +12,7 @@ gs = gspread.authorize(creds)
 sh = gs.open_by_url(
     'https://docs.google.com/spreadsheets/d/1HzQhihET7Brr0XrWDUrBXyOyYCRMD7g_TazBfa46kv0/edit?usp=sharing')
 
-worksheet = sh.get_worksheet(0)
+worksheet = sh.worksheet('Total')
 
 original_data = worksheet.get_all_records()
 
@@ -36,7 +36,7 @@ def isActivityValid(activity, today):
     start_date = datetime.datetime.strptime(
         activity['startDate'], '%Y-%m-%d').date()
     end_date = datetime.datetime.strptime(
-        activity['endDate'], '%Y-%m-%d').date() if activity['endDate'] != '' else None
+        activity['endDate'], '%Y-%m-%d').date() if activity['endDate'] != '-' else None
 
     return start_date >= today or (end_date != None and end_date >= today)
 
@@ -64,7 +64,7 @@ def generate_city_month_dict(city_dict):
         for activity in value:
             start_month = month_convert_dict[activity['startDate'][5:7]]
             end_month = month_convert_dict[activity['endDate']
-                                           [5:7]] if activity['endDate'] != '' else None
+                                           [5:7]] if activity['endDate'] != '-' else None
 
             if end_month == None or start_month == end_month:
                 if start_month not in city_month_dict[key]:
