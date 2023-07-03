@@ -58,22 +58,23 @@ def handle_message(event):
     match user_input:
         case input if '/' in input and checkCityMonthFormat(input):
             city, month = input.split('/')
-            print('city', city)
-            print('month', month)
-            if city in city_month_dict and month in city_month_dict[city]:
+            if city in city_with_activity and month in city_month_dict[city]:
                 message = send_city_activity(city_month_dict[city][month])
             else:
-                message = TextSendMessage(text=f'唉呀，{input}最近沒有喜劇活動喔！')
+                message = TextSendMessage(text=f'唉呀，{city} 在 {month} 沒有喜劇活動喔！')
         case input if input in city_with_activity:
             message = send_city_activity(city_dict[input])
         case input if input in tw_city_list:
-            message = TextSendMessage(text=f'唉呀，{input}最近沒有喜劇活動喔！')
-        case input if checkRecommendFormat(input):
-            activity = random_recommend_activity()
-            message = send_recommend_activity(activity)
+            message = TextSendMessage(text=f'唉呀，{input} 最近沒有喜劇活動喔！')
         case input if '/' in input and checkCityRecommendFormat(input):
             city, recommend = input.split('/')
-            activity = random_city_recommend_activity(city_dict[city])
+            if city in city_with_activity:
+                activity = random_city_recommend_activity(city_dict[city])
+                message = send_recommend_activity(activity)
+            else:
+                message = TextSendMessage(text=f'唉呀，{city} 最近沒有喜劇活動喔！')
+        case input if checkRecommendFormat(input):
+            activity = random_recommend_activity()
             message = send_recommend_activity(activity)
         case _:
             return

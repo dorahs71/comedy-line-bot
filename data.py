@@ -12,7 +12,7 @@ gs = gspread.authorize(creds)
 sh = gs.open_by_url(
     'https://docs.google.com/spreadsheets/d/1HzQhihET7Brr0XrWDUrBXyOyYCRMD7g_TazBfa46kv0/edit?usp=sharing')
 
-worksheet = sh.get_worksheet(4)
+worksheet = sh.get_worksheet(0)
 
 original_data = worksheet.get_all_records()
 
@@ -90,5 +90,6 @@ def random_recommend_activity():
 
 
 def random_city_recommend_activity(activity_lst):
+
     activity = random.choice(activity_lst)
     return activity
