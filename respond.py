@@ -19,11 +19,11 @@ def send_sticker():
 
 def send_recommend_activity(activity):
     json_file = generate_activity_json(
-        activity[-2], activity[0], activity[1], activity[2], activity[-1])
+        activity['img src'], activity['theme'], activity['location'], activity['duration'], activity['link'])
 
     try:
         recommend_message = FlexSendMessage(
-            alt_text='阿鏘推薦喜劇',
+            alt_text='逗逗推薦喜劇',
             contents=json_file
         )
     except:
@@ -39,16 +39,16 @@ def send_city_activity(city_activity_list):
 
         return city_message
 
-    elif len(city_activity_list) > 8:
-        city_activity_list = city_activity_list[:8]
+    elif len(city_activity_list) > 10:
+        city_activity_list = city_activity_list[:10]
 
     json_file = [generate_activity_json(
-        activity[-2], activity[0], activity[1], activity[2], activity[-1]) for activity in city_activity_list]
+        activity['img src'], activity['theme'], activity['location'], activity['duration'], activity['link']) for activity in city_activity_list]
     flex_contents = {"type": "carousel", "contents": json_file}
 
     try:
         city_message = FlexSendMessage(
-            alt_text='阿鏘帶你看喜劇',
+            alt_text='逗逗帶你看喜劇',
             contents=flex_contents
         )
     except:
