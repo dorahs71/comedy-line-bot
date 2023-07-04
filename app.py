@@ -76,10 +76,12 @@ def handle_message(event):
         case input if checkRecommendFormat(input):
             activity = random_recommend_activity()
             message = send_recommend_activity(activity)
-        case _:
+        case input if '逗逗' in input:
             one_liner = random_one_liner()
             text_message = send_one_liner(one_liner)
             message = TextSendMessage(text=text_message)
+        case _:
+            return
 
     line_bot_api.reply_message(event.reply_token, message)
 
