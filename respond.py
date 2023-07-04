@@ -1,20 +1,6 @@
 from linebot.models import *
 
-from data import *
-
 from message_json import *
-
-import random
-
-
-def send_sticker():
-    random_sticker_id = random.randint(1988, 2027)
-    sticker_message = StickerSendMessage(
-        package_id='446',
-        sticker_id=random_sticker_id
-    )
-
-    return sticker_message
 
 
 def send_recommend_activity(activity):
@@ -55,3 +41,13 @@ def send_city_activity(city_activity_list):
         city_message = TextSendMessage(text='唉呀...出了點問題耶～')
 
     return city_message
+
+
+def send_one_liner(one_liner):
+    name = one_liner['name']
+    sentence = one_liner['one_liner']
+    fb = one_liner['fb']
+    ig = one_liner['ig']
+    text = f'「{sentence}」-{name}\nFB: {fb}\nIG: {ig}'
+
+    return text

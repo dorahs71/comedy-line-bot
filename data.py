@@ -12,9 +12,13 @@ gs = gspread.authorize(creds)
 sh = gs.open_by_url(
     'https://docs.google.com/spreadsheets/d/1HzQhihET7Brr0XrWDUrBXyOyYCRMD7g_TazBfa46kv0/edit?usp=sharing')
 
-worksheet = sh.worksheet('Total')
+totalSheet = sh.worksheet('Total')
 
-original_data = worksheet.get_all_records()
+total_activity_data = totalSheet.get_all_records()
+
+oneLinerSheet = sh.worksheet('One_liner')
+
+one_liner_data = oneLinerSheet.get_all_records()
 
 month_convert_dict = {'01': '一月', '02': '二月', '03': '三月', '04': '四月', '05': '五月',
                       '06': '六月', '07': '七月', '08': '八月', '09': '九月', '10': '十月', '11': '十一月', '12': '十二月'}
@@ -27,7 +31,7 @@ tw_city_list = ['台北', '新北', '基隆', '桃園', '新竹', '苗栗', '台
 def generateValidActivity():
     today = datetime.date.today()
     valid_activity = [
-        activity for activity in original_data if isActivityValid(activity, today)]
+        activity for activity in total_activity_data if isActivityValid(activity, today)]
 
     return valid_activity
 
@@ -90,6 +94,10 @@ def random_recommend_activity():
 
 
 def random_city_recommend_activity(activity_lst):
-
     activity = random.choice(activity_lst)
     return activity
+
+
+def random_one_liner():
+    one_liner = random.choice(one_liner_data)
+    return one_liner

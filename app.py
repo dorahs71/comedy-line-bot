@@ -77,9 +77,9 @@ def handle_message(event):
             activity = random_recommend_activity()
             message = send_recommend_activity(activity)
         case _:
-            return
-            # message = send_sticker()
-            # line_bot_api.reply_message(event.reply_token, message)
+            one_liner = random_one_liner()
+            text_message = send_one_liner(one_liner)
+            message = TextSendMessage(text=text_message)
 
     line_bot_api.reply_message(event.reply_token, message)
 
