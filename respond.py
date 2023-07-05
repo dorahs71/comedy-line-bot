@@ -9,7 +9,7 @@ def send_recommend_activity(activity):
 
     try:
         recommend_message = FlexSendMessage(
-            alt_text='逗逗推薦你喜劇 o(ↀ∀ↀ*)o',
+            alt_text='逗逗推薦你喜劇\no(ↀ∀ↀ*)o',
             contents=json_file
         )
     except:
@@ -34,7 +34,7 @@ def send_city_activity(city_activity_list):
 
     try:
         city_message = FlexSendMessage(
-            alt_text='逗逗帶你看喜劇 (= ↀωↀ =)/',
+            alt_text='逗逗帶你看喜劇\n\(= ↀωↀ =)/',
             contents=flex_contents
         )
     except:

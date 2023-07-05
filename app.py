@@ -114,14 +114,14 @@ def checkCityRecommendFormat(input):
 @handler.add(FollowEvent)
 def handle_follow(event):
     message = TextSendMessage(
-        text='喵喵喵～朕想去看喜劇，姑且讓你這卑微的人類告訴我，想去哪個城市看表演吧!(๑ↀᆺↀ๑)✧')
+        text='喵喵喵～朕想去看喜劇，姑且讓你這卑微的人類告訴我，想去哪個城市看表演吧!\n(๑ↀᆺↀ๑)✧')
     line_bot_api.reply_message(event.reply_token, message)
 
 
 @handler.add(JoinEvent)
 def handle_join(event):
     message = TextSendMessage(
-        text='喵喵喵～朕想去看喜劇，姑且讓你們這些卑微的人類告訴我，想去哪個城市看表演吧!(๑ↀᆺↀ๑)✧')
+        text='喵喵喵～朕想去看喜劇，姑且讓你們這些卑微的人類告訴我，想去哪個城市看表演吧!\n(๑ↀᆺↀ๑)✧')
     line_bot_api.reply_message(event.reply_token, message)
 
 
