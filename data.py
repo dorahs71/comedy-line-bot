@@ -1,16 +1,19 @@
+import os
 from google.oauth2.service_account import Credentials
 import gspread
 import random
 import datetime
 from collections import defaultdict
 
+sheetUrl = os.getenv('SHEET_URL')
+
 scope = ['https://www.googleapis.com/auth/spreadsheets']
 
-creds = Credentials.from_service_account_file("credentials.json", scopes=scope)
+creds = Credentials.from_service_account_file(
+    "/etc/secrets/credentials.json", scopes=scope)
 gs = gspread.authorize(creds)
 
-sh = gs.open_by_url(
-    'https://docs.google.com/spreadsheets/d/1HzQhihET7Brr0XrWDUrBXyOyYCRMD7g_TazBfa46kv0/edit?usp=sharing')
+sh = gs.open_by_url(sheetUrl)
 
 totalSheet = sh.worksheet('Total')
 
