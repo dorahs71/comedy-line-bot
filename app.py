@@ -16,7 +16,7 @@ from data import *
 
 
 app = Flask(__name__)
-static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
+
 # Channel Access Token
 line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
 # Channel Secret
@@ -127,7 +127,6 @@ def handle_join(event):
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
-    print(event.postback)
     message = TextSendMessage(
         text='告訴我吧，卑微的人類～你想查詢的城市，如:[台北]，我還可以篩選月份，如:[台北/七月] <(๑ↀVↀ๑)>')
     line_bot_api.reply_message(event.reply_token, message)
