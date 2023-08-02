@@ -127,8 +127,9 @@ def handle_join(event):
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
+    this_month = generateThisMonth()
     message = TextSendMessage(
-        text='告訴我吧，卑微的人類～你想查詢的城市，如:[台北]，我還可以篩選月份，如:[台北/七月] <(๑ↀVↀ๑)>')
+        text=f'告訴我吧，卑微的人類～你想查詢的城市，如:[台北]，我還可以篩選月份，如:[台北/{this_month}] <(๑ↀVↀ๑)>')
     line_bot_api.reply_message(event.reply_token, message)
 
 

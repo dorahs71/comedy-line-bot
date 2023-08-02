@@ -2,7 +2,7 @@ import os
 from google.oauth2.service_account import Credentials
 import gspread
 import random
-import datetime
+from datetime import datetime
 from collections import defaultdict
 
 sheetUrl = os.getenv('SHEET_URL')
@@ -31,8 +31,15 @@ tw_city_list = ['台北', '新北', '基隆', '桃園', '新竹', '苗栗', '台
                 '南投', '嘉義', '台南', '高雄', '屏東', '台東', '花蓮', '宜蘭', '澎湖', '金門', '馬祖']
 
 
+def generateThisMonth():
+    today = datetime.now()
+    this_month = datetime.strftime(today, '%Y-%m-%d')[5:7]
+
+    return month_convert_dict[this_month]
+
+
 def generateValidActivity():
-    today = datetime.date.today()
+    today = datetime.now()
     valid_activity = [
         activity for activity in total_activity_data if isActivityValid(activity, today)]
 
@@ -40,10 +47,10 @@ def generateValidActivity():
 
 
 def isActivityValid(activity, today):
-    start_date = datetime.datetime.strptime(
-        activity['startDate'], '%Y-%m-%d').date()
-    end_date = datetime.datetime.strptime(
-        activity['endDate'], '%Y-%m-%d').date() if activity['endDate'] != '-' else None
+    start_date = datetime.strptime(
+        activity['startDate'], '%Y-%m-%d')
+    end_date = datetime.strptime(
+        activity['endDate'], '%Y-%m-%d') if activity['endDate'] != '-' else None
 
     return start_date >= today or (end_date != None and end_date >= today)
 
